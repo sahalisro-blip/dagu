@@ -1070,6 +1070,28 @@ func (srv *Server) setupAssetRoutes(r *chi.Mux, basePath string) {
 		}
 		fileServer.ServeHTTP(w, r)
 	})
+
+	srv.setupImageStaticRoutes(r, basePath)
+}
+
+func (srv *Server) setupImageStaticRoutes(r *chi.Mux, basePath string) {
+	imageRoot := strings.TrimSpace(os.Getenv("DAGU_IMAGE_STATIC_DIR"))
+	if imageRoot == "" {
+		imageRoot = "/data1/project/output"
+	}
+	imageURLPrefix := strings.Trim(strings.TrimSpace(os.Getenv("DAGU_IMAGE_URL_PREFIX")), "/")
+	if imageURLPrefix == "" {
+		imageURLPrefix = "images"
+	}
+
+	mountedPrefix := pathutil.BuildPublicEndpointPath(basePath, imageURLPrefix)
+	routePattern := mountedPrefix + "/*"
+	fileServer := http.StripPrefix(mountedPrefix, http.FileServer(http.Dir(imageRoot)))
+
+	r.Get(routePattern, func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "max-age=3600")
+		fileServer.ServeHTTP(w, r)
+	})
 }
 
 func (srv *Server) setupOIDCRoutes(r *chi.Mux, basePath string) {
