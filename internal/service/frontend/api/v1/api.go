@@ -329,6 +329,8 @@ func (a *API) ConfigureRoutes(ctx context.Context, r chi.Router) error {
 		r.Use(WithRemoteNode(a.remoteNodeResolver, mountedAPIPath))
 		r.Use(WebhookRawBodyMiddleware())
 
+		r.Get("/images", a.handleGetImages)
+
 		middlewares := []api.StrictMiddlewareFunc{validateDAGFileNameMiddleware}
 		options := api.StrictHTTPServerOptions{
 			ResponseErrorHandlerFunc: a.handleError,

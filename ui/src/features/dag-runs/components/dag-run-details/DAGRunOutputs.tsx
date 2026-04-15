@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import StatusChip from '../../../../ui/StatusChip';
 import dayjs from '@/lib/dayjs';
+import { DAGRunImageGallery } from './DAGRunImageGallery';
 
 // Convert StatusLabel string to Status enum
 function statusLabelToStatus(label: StatusLabel): Status {
@@ -132,6 +133,7 @@ function DAGRunOutputs({ dagName, dagRunId }: Props) {
 
   const { metadata, outputs } = data;
   const outputCount = Object.keys(outputs).length;
+  const logText = Object.values(outputs).map(String).join('\n');
 
   // Show simple message when no outputs
   if (outputCount === 0) {
@@ -257,6 +259,8 @@ function DAGRunOutputs({ dagName, dagRunId }: Props) {
           </TableBody>
         </Table>
       </div>
+
+      <DAGRunImageGallery logText={logText} />
     </div>
   );
 }
