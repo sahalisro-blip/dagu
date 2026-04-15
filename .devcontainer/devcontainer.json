@@ -2,9 +2,11 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/go
 {
   "name": "Go",
-  "image": "mcr.microsoft.com/devcontainers/go:1-1.24-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "features": {
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.25.6"
+    },
     "ghcr.io/devcontainers/features/node:1": {}
-  },
-  "postCreateCommand": "make build-ui"
+  }
 }
